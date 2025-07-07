@@ -56,8 +56,8 @@ public class DatabaseManager {
      * @param listener ValueEventListener to handle the response
      */
     public void getStudentByQalamId(String qalamId, ValueEventListener listener) {
-        Query query = studentsRef.orderByChild("qalamId").equalTo(qalamId);
-        query.addListenerForSingleValueEvent(listener);
+        // Direct access using the qalamId as the key since that's how data is stored
+        studentsRef.child(qalamId).addListenerForSingleValueEvent(listener);
     }
     
     /**

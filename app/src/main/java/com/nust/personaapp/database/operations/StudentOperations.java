@@ -46,13 +46,13 @@ public class StudentOperations {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    // Get password from database
-                    String passwordFromDB = snapshot.child(qalamId).child("password").getValue(String.class);
+                    // Get password from database - snapshot is already the student node
+                    String passwordFromDB = snapshot.child("password").getValue(String.class);
                     
                     if (passwordFromDB != null && passwordFromDB.equals(password)) {
                         // Password correct, create student object
-                        String degreeFromDB = snapshot.child(qalamId).child("degree").getValue(String.class);
-                        Student student = createStudentFromSnapshot(snapshot.child(qalamId), degreeFromDB);
+                        String degreeFromDB = snapshot.child("degree").getValue(String.class);
+                        Student student = createStudentFromSnapshot(snapshot, degreeFromDB);
                         
                         if (student != null) {
                             callback.onSuccess(student);
