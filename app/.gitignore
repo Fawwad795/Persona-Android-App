@@ -1,1 +1,24 @@
+# Build outputs
 /build
+/release
+
+# Generated files
+/generated
+/intermediates
+/outputs
+/tmp
+
+# Proguard
+/proguard
+
+# Android Lint
+/lint-results.html
+/lint-results_files/
+
+# Unit test reports
+/reports
+/test-results
+
+# Firebase debug logs
+firebase-debug.log
+firebase-debug.*.log

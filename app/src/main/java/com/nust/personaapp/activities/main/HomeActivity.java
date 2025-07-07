@@ -1,7 +1,5 @@
 package com.nust.personaapp.activities.main;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
