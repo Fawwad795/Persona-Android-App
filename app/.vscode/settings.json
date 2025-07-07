@@ -1,0 +1,17 @@
+{
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.compile.nullAnalysis.mode": "automatic",
+    "files.exclude": {
+        "**/build": true,
+        "**/.gradle": true
+    },
+    "java.project.sourcePaths": [
+        "src/main/java",
+        "src/test/java",
+        "src/androidTest/java"
+    ],
+    "java.project.referencedLibraries": [
+        "libs/**/*.jar"
+    ],
+    "gradle.nestedProjects": true
+}

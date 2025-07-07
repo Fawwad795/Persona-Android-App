@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "920500266042",
+    "project_id": "persona-a5651",
+    "storage_bucket": "persona-a5651.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:920500266042:android:f7a1300b58bac0e254c103",
+        "android_client_info": {
+          "package_name": "com.nust.personaapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATLu_50XTeRg7tFqyJSg3y0SwaQfXQThg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
