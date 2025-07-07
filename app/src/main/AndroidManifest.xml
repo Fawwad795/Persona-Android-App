@@ -13,39 +13,36 @@
         android:theme="@style/Theme.PersonaApp"
         tools:targetApi="31">
         <activity
-            android:name=".AnnouncementsActivity"
+            android:name=".activities.features.AnnouncementsActivity"
             android:exported="false" />
         <activity
-            android:name=".SignUpPageActivity"
+            android:name=".activities.auth.SignupActivity"
             android:exported="false" />
         <activity
-            android:name=".SignUpActivity"
+            android:name=".activities.features.DuesActivity"
             android:exported="false" />
         <activity
-            android:name=".DuesActivity"
+            android:name=".activities.features.RequestsActivity"
             android:exported="false" />
         <activity
-            android:name=".RequestActivity"
+            android:name=".activities.features.EPassActivity"
             android:exported="false" />
         <activity
-            android:name=".EPassActivity"
+            android:name=".activities.features.MenuActivity"
             android:exported="false" />
         <activity
-            android:name=".MenuActivity"
+            android:name=".activities.features.ShuttleActivity"
             android:exported="false" />
         <activity
-            android:name=".ShuttleActivity"
+            android:name=".activities.features.ComplaintsActivity"
             android:exported="false" />
         <activity
-            android:name=".ComplaintActivity"
-            android:exported="false" />
-        <activity
-            android:name=".LoginPageActivity"
+            android:name=".activities.auth.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_splash_screen"
             android:theme="@style/Theme.PersonaApp" />
         <activity
-            android:name=".SplashScreen"
+            android:name=".activities.main.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,7 +51,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HomeActivity"
+            android:name=".activities.main.HomeActivity"
             android:exported="false" />
     </application>
 

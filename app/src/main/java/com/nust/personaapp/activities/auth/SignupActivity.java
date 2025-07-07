@@ -1,4 +1,4 @@
-package com.nust.personaapp;
+package com.nust.personaapp.activities.auth;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.activity.OnBackPressedCallback;
@@ -11,18 +11,20 @@ import android.widget.EditText;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.nust.personaapp.database.operations.StudentOperations;
+import com.nust.personaapp.models.Student;
+import com.nust.personaapp.models.UndergradStudent;
+import com.nust.personaapp.models.PostgradStudent;
+import com.nust.personaapp.R;
 import java.security.SecureRandom;
 
-public class SignUpPageActivity extends AppCompatActivity implements OnClickListener {
+public class SignupActivity extends AppCompatActivity implements OnClickListener {
 
     EditText signUpFirstName, signUpLastName, signUpQalamId, signUpEmail, signUpPassword;
     Spinner degreeSpinner, schoolSpinner, departmentSpinner, semesterSpinner;
     Button signUpButton;
     Student student;
-    FirebaseDatabase database;
-    DatabaseReference reference;
+    private StudentOperations studentOperations;
     SecureRandom random = new SecureRandom();
 
     @Override
@@ -49,6 +51,9 @@ public class SignUpPageActivity extends AppCompatActivity implements OnClickList
         signUpPassword = findViewById(R.id.enterSignUpPassword);
         signUpButton = findViewById(R.id.signUpButton);
 
+        // Initialize database operations
+        studentOperations = new StudentOperations();
+
         // Event handler onClick overridden below
         signUpButton.setOnClickListener(this);
 
@@ -57,7 +62,7 @@ public class SignUpPageActivity extends AppCompatActivity implements OnClickList
             @Override
             public void handleOnBackPressed() {
                 // Navigate back to LoginPageActivity
-                Intent intent = new Intent(SignUpPageActivity.this, LoginPageActivity.class);
+                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -70,10 +75,6 @@ public class SignUpPageActivity extends AppCompatActivity implements OnClickList
     //Overriding the onClick method of the interface OnClickListener
     @Override
     public void onClick(View view) {
-
-        database = FirebaseDatabase.getInstance();
-        reference = database.getReference("Student_Records");
-
         // Get the values from the EditText fields
         String firstName = signUpFirstName.getText().toString();
         String lastName = signUpLastName.getText().toString();
@@ -87,40 +88,47 @@ public class SignUpPageActivity extends AppCompatActivity implements OnClickList
 
         // checking if any of the fields are empty
         if (firstName.isEmpty() || lastName.isEmpty() || degree.equals("Select") || school.equals("Select") || qalamId.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(SignUpPageActivity.this, "Please fill all the fields!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignupActivity.this, "Please fill all the fields!", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (degree.equals("Undergraduate")) {
             if (department.equals("Select") || semester.equals("Select")) {
-                Toast.makeText(SignUpPageActivity.this, "UG students must have a department and semester!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignupActivity.this, "UG students must have a department and semester!", Toast.LENGTH_SHORT).show();
                 return;
             } else {
                 student = new UndergradStudent(firstName, lastName, degree, school, department, semester, qalamId, email, password, random.nextInt(31) + 70);
             }
-        }
-
-        if (degree.equals("Postgraduate")) {
+        } else if (degree.equals("Postgraduate")) {
             if (department.equals("Select") && semester.equals("Select")) {
                 student = new PostgradStudent(firstName, lastName, degree, school, qalamId, email, password, random.nextInt(31) + 70);
-            }
-            if (!department.equals("Select") && semester.equals("Select")) {
-                student = new PostgradStudent(firstName, lastName, degree, school, semester, qalamId, email, password, random.nextInt(31) + 70);
-            }
-            if (!department.equals("Select") && !semester.equals("Select")) {
+            } else if (!department.equals("Select") && semester.equals("Select")) {
+                student = new PostgradStudent(firstName, lastName, degree, school, department, qalamId, email, password, random.nextInt(31) + 70);
+            } else if (!department.equals("Select") && !semester.equals("Select")) {
                 student = new PostgradStudent(firstName, lastName, degree, school, department, semester, qalamId, email, password, random.nextInt(31) + 70);
             }
+        }
 
-            reference.child(qalamId).setValue(student);
+        // Register the student using the new database operations
+        if (student != null) {
+            studentOperations.registerStudent(student, new StudentOperations.RegistrationCallback() {
+                @Override
+                public void onSuccess() {
+                    // Make a toast to show that the user has been registered
+                    Toast.makeText(SignupActivity.this, "Registered successfully!", Toast.LENGTH_SHORT).show();
 
-            // Make a toast to show that the user has been registered
-            Toast.makeText(SignUpPageActivity.this, "Registered successfully!", Toast.LENGTH_SHORT).show();
+                    // Navigate to LoginPageActivity
+                    Intent loginPage = new Intent(SignupActivity.this, LoginActivity.class);
+                    loginPage.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(loginPage);
+                    finish();
+                }
 
-            // Navigate to LoginPageActivity
-            Intent loginPage = new Intent(SignUpPageActivity.this, LoginPageActivity.class);
-            loginPage.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(loginPage);
-            finish();
+                @Override
+                public void onError(String errorMessage) {
+                    Toast.makeText(SignupActivity.this, "Registration failed: " + errorMessage, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 

@@ -1,4 +1,4 @@
-package com.nust.personaapp;
+package com.nust.personaapp.activities.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +16,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationBarView.*;
+import com.nust.personaapp.models.Student;
+import com.nust.personaapp.R;
+import com.nust.personaapp.activities.features.*;
 
 public class HomeActivity extends AppCompatActivity implements OnClickListener, OnItemSelectedListener {
 
@@ -68,80 +71,85 @@ public class HomeActivity extends AppCompatActivity implements OnClickListener, 
 
         // Instantiating Bottom Navigation
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setSelectedItemId(R.id.home);
+
+        // Setting onClickListeners for Bottom Navigation
         bottomNavigationView.setOnItemSelectedListener(this);
     }
 
     // Overriding the handler for Button Clicks on the cards
     @Override
     public void onClick(View view) {
-        // Play button tap sound
-        clicksound.start();
-
         try {
+            if (clicksound != null) {
+                clicksound.start();
+            }
+
+            Intent newIntent = null;
             switch (view.getId()) {
                 case R.id.menu_button:
-                    Intent menu = new Intent(HomeActivity.this, MenuActivity.class);
-                    startActivityOfIntent(menu);
+                    newIntent = new Intent(HomeActivity.this, MenuActivity.class);
                     break;
                 case R.id.e_pass_button:
-                    Intent epass = new Intent(HomeActivity.this, EPassActivity.class);
-                    startActivityOfIntent(epass);
+                    newIntent = new Intent(HomeActivity.this, EPassActivity.class);
                     break;
                 case R.id.complaint_button:
-                    Intent complaint = new Intent(HomeActivity.this, ComplaintActivity.class);
-                    startActivityOfIntent(complaint);
+                    newIntent = new Intent(HomeActivity.this, ComplaintsActivity.class);
                     break;
                 case R.id.request_button:
-                    Intent request = new Intent(HomeActivity.this, RequestActivity.class);
-                    startActivityOfIntent(request);
+                    newIntent = new Intent(HomeActivity.this, RequestsActivity.class);
                     break;
                 case R.id.dues_button:
-                    Intent dues = new Intent(HomeActivity.this, DuesActivity.class);
-                    startActivityOfIntent(dues);
+                    newIntent = new Intent(HomeActivity.this, DuesActivity.class);
+                    break;
+                default:
                     break;
             }
-        } catch (InterruptedException e) {
-            System.out.print(e.getMessage());
+
+            if (newIntent != null) {
+                startActivityOfIntent(newIntent);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     // Overriding the handler for Bottom Navigation
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.announcements:
-                Intent announcements = new Intent(HomeActivity.this, AnnouncementsActivity.class);
-                startActivityOfNavBar(announcements);
-                return true;
-            case R.id.home:
-                return true;
-            case R.id.shuttle:
-                Intent shuttle = new Intent(HomeActivity.this, ShuttleActivity.class);
-                startActivityOfNavBar(shuttle);
-                return true;
+        Intent newIntent = null;
+        int itemId = item.getItemId();
+
+        if (itemId == R.id.home) {
+            // Already on home, do nothing
+            return true;
+        } else if (itemId == R.id.announcements) {
+            newIntent = new Intent(HomeActivity.this, AnnouncementsActivity.class);
+        } else if (itemId == R.id.shuttle) {
+            newIntent = new Intent(HomeActivity.this, ShuttleActivity.class);
         }
-        return false;
+
+        if (newIntent != null) {
+            startActivityOfNavBar(newIntent);
+        }
+        return true;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // Ensure the home item is selected when resuming this activity
-        bottomNavigationView.setSelectedItemId(R.id.home);
+        // Re-initialize MediaPlayer if it was released
+        if (clicksound == null) {
+            clicksound = MediaPlayer.create(this, R.raw.clicksound);
+        }
     }
 
     // Method to start an activity with a delay, if activity exists, start that, else create a new one.
     private void startActivityOfIntent(Intent newIntent) throws InterruptedException {
-        newIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        Thread.sleep(400);
+        Thread.sleep(300);
         startActivity(newIntent);
     }
 
     private void startActivityOfNavBar(Intent newIntent){
-        newIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(newIntent);
-        overridePendingTransition(0,0);
     }
-
 }

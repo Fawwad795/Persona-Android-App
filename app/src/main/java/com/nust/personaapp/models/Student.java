@@ -1,7 +1,12 @@
-package com.nust.personaapp;
+package com.nust.personaapp.models;
 
+import com.google.firebase.database.DataSnapshot;
 import java.io.Serializable;
 
+/**
+ * Abstract Student class - Base class for all student types
+ * Contains common properties and methods for all students
+ */
 public abstract class Student implements Serializable {
     private String firstName, lastName, degree, school, department, semester, qalamId, email, password;
     private int percentMonthlyAttendance;
@@ -22,6 +27,7 @@ public abstract class Student implements Serializable {
         this.percentMonthlyAttendance = percentMonthlyAttendance;
     }
 
+    // Getters and Setters
     public String getFirstName() {
         return firstName;
     }
@@ -60,6 +66,14 @@ public abstract class Student implements Serializable {
 
     public void setDepartment(String department) {
         this.department = department;
+    }
+    
+    public String getSemester() {
+        return semester;
+    }
+
+    public void setSemester(String semester) {
+        this.semester = semester;
     }
 
     public String getQalamId() {
